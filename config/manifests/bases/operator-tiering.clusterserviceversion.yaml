@@ -1,0 +1,42 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+  name: operator-tiering.v0.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions: {}
+  description: Operator that creates clusterquotas for users based on the presense
+    of bronze,silver, or gold values within the cluster_tier user label
+  displayName: Tiering Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: null
+    strategy: ""
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - cluster quota; quota; limits; clusterquota
+  links:
+  - name: Operator Tiering
+    url: https://operator-tiering.domain
+  maintainers:
+  - email: rico@redhat.com
+    name: Rico Randall
+  maturity: alpha
+  provider:
+    name: Red Hat/ NAPS
+  version: 0.0.0

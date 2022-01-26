@@ -1,0 +1,19 @@
+apiVersion: tiering.redhat.com/v1
+kind: Tier
+metadata:
+  name: tier-instance
+spec:
+  tier_resource_allocation:
+    bronze:
+      cpu: 1
+      memory: 1Gi 
+      pods: 5
+    silver: 
+      cpu: 2
+      memory: 2Gi
+      pods: 10
+    gold: 
+      cpu: 3
+      memory: 4Gi
+      pods: 20
+

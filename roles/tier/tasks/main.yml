@@ -1,0 +1,79 @@
+---
+# tiering/tasks/main.yml
+
+- name: Get all Cluster Resource Quotas
+  k8s_info:
+    kind: ClusterResourceQuota
+  register: all_clusterresourcequotas
+
+- name: Get all users accounts
+  k8s_info:
+    kind: User
+  register: users_list
+
+- name: Apply quota to bronze users 
+  k8s:
+    state: present
+    definition:
+      apiVersion: quota.openshift.io/v1
+      kind: ClusterResourceQuota
+      metadata:
+        name: user-bronze-{{ item['metadata']['name'] }}
+      spec:
+        quota:
+          hard:
+            cpu: "{{ tier_resource_allocation['bronze']['cpu'] }}" 
+            memory: "{{ tier_resource_allocation['bronze']['memory'] }}" 
+            pods: "{{ tier_resource_allocation['bronze']['pods'] }}" 
+        selector:
+          annotations:
+            openshift.io/requester: "{{ item['metadata']['name'] }}"
+  loop: "{{ users_list['resources'] }}" 
+  when: 
+    - "'bronze' in item['metadata']['labels']['cluster_tier']"
+    - "'user-bronze-' + item['metadata']['name'] not in all_clusterresourcequotas['resources']"
+ 
+- name: Apply quota to silver users 
+  k8s:
+    state: present
+    definition:
+      apiVersion: quota.openshift.io/v1
+      kind: ClusterResourceQuota
+      metadata:
+        name: user-silver-{{ item['metadata']['name'] }}
+      spec:
+        quota:
+          hard:
+            cpu: "{{ tier_resource_allocation['silver']['cpu'] }}" 
+            memory: "{{ tier_resource_allocation['silver']['memory'] }}" 
+            pods: "{{ tier_resource_allocation['silver']['pods'] }}" 
+        selector:
+          annotations:
+            openshift.io/requester: "{{ item['metadata']['name'] }}"
+  loop: "{{ users_list['resources'] }}"
+  when: 
+    - "'silver' in item['metadata']['labels']['cluster_tier']"
+    - "'user-silver-' + item['metadata']['name'] not in all_clusterresourcequotas['resources']"
+
+- name: Apply quota to gold users 
+  k8s:
+    state: present
+    definition:
+      apiVersion: quota.openshift.io/v1
+      kind: ClusterResourceQuota
+      metadata:
+        name: user-gold-{{ item['metadata']['name'] }}
+      spec:
+        quota:
+          hard:
+            cpu: "{{ tier_resource_allocation['gold']['cpu'] }}" 
+            memory: "{{ tier_resource_allocation['gold']['memory'] }}" 
+            pods: "{{ tier_resource_allocation['gold']['pods'] }}" 
+        selector:
+          annotations:
+            openshift.io/requester: "{{ item['metadata']['name'] }}"
+  loop: "{{ users_list['resources'] }}"
+  when: 
+    - "'gold' in item['metadata']['labels']['cluster_tier']"
+    - "'user-gold-' + item['metadata']['name'] not in all_clusterresourcequotas['resources']"
+

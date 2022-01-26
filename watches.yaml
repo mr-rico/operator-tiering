@@ -1,0 +1,7 @@
+---
+# Use the 'create api' subcommand to add watches to this file.
+- version: v1
+  group: tiering.redhat.com
+  kind: Tier
+  role: tier
+#+kubebuilder:scaffold:watch
