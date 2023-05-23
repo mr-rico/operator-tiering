@@ -2,12 +2,12 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
-  name: red-hat-naps
+  name: red-hat-rico
   namespace: openshift-marketplace
 spec:
-  displayName: Red Hat/ NAPS
+  displayName: Red Hat/ Rico
   image: quay.io/rico/operator-tiering-index:0.0.1
-  publisher: Red Hat/ NAPS
+  publisher: Red Hat/ Rico
   sourceType: grpc
   updateStrategy:
     registryPoll:
